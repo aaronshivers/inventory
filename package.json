@@ -1,0 +1,38 @@
+{
+  "name": "website-2018-12",
+  "version": "1.0.0",
+  "description": "website template 2018 December",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha -t 50000 test/test.js"
+  },
+  "keywords": [],
+  "author": "aaronshivers",
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "bcrypt": "^3.0.2",
+    "cookie-parser": "^1.4.3",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.4.0",
+    "lodash": "^4.17.11",
+    "mongoose": "^5.4.0",
+    "validator": "^10.9.0"
+  },
+  "devDependencies": {
+    "expect": "^23.6.0",
+    "mocha": "^5.2.0",
+    "supertest": "^3.3.0"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/aaronshivers/website-2018-december.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aaronshivers/website-2018-december/issues"
+  },
+  "homepage": "https://github.com/aaronshivers/website-2018-december#readme"
+}
