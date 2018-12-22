@@ -91,7 +91,7 @@ router.delete('/items/:id', authenticateUser, (req, res) => {
       if (!item) {
         res.status(404).send('Item Not Found')
       }
-      res.redirect('items')
+      res.redirect('/items')
     }).catch(err => res.status(400).send())
   })
 })
@@ -123,6 +123,14 @@ router.patch('/items/:id', authenticateUser, (req, res) => {
         res.redirect('/items')
       }
     }).catch(err => res.send(err.message))
+  })
+})
+
+// POST /find
+router.post('/find', (req, res) => {
+  name = req.body.name
+  Inventory.findOne({ name }).then((item) => {
+    res.render('view', { item })
   })
 })
 

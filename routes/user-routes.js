@@ -18,15 +18,20 @@ router.get('/users', authenticateUser, (req, res) => {
   }).catch(err => res.status(400).send(err))
 })
 
+// GET /signup
+router.get('/signup', (req, res) => {
+  res.render('signup')
+})
+
 // POST /users
-router.post('/users', authenticateUser, (req, res) => {
+router.post('/users', (req, res) => {
   const { email, password } = req.body
   const user = new User({ email, password })
 
   user.save().then(() => {
     return generateAuthToken(user)
   }).then((value) => {
-    res.cookie('token', value.token, { expires: new Date(Date.now() + 86400000) }).send(value.user.email)
+    res.cookie('token', value.token, { expires: new Date(Date.now() + 86400000) }).redirect('profile')
   }).catch(err => res.status(400).send(err))
 })
 
@@ -83,13 +88,6 @@ router.patch('/users/:id', authenticateUser, (req, res) => {
     }
     res.redirect('/users')
   })
-})
-
-// Signup =====================================
-
-// GET /signup
-router.get('/signup', (req, res) => {
-  res.redirect('profile')
 })
 
 // LOGIN =====================================
