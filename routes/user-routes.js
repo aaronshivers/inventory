@@ -30,7 +30,7 @@ router.post('/users', (req, res) => {
     return generateAuthToken(user)
   }).then((value) => {
     res.cookie('token', value.token, { expires: new Date(Date.now() + 86400000) }).redirect('profile')
-  }).catch(err => res.status(400).send(err))
+  }).catch(err => res.status(400).send(err.message))
 })
 
 // GET /users/:id
@@ -50,12 +50,22 @@ router.get('/users/:id', authenticateUser, (req, res, next) => {
 })
 
 // GET /users/:id/edit
-router.get('/users/:id/edit', (req, res) => {
-  const id = req.params.id
+router.get('/users/:id/edit', authenticateUser, (req, res) => {
+  const token = req.cookies.token
+  const secret = process.env.JWT_SECRET
 
-  User.findById(id).then((user) => {
-    res.render('edit-user', { user })
-  }).catch(err => res.send(err.message))
+  jwt.verify(token, secret, (err, decoded) => {
+    const decodedId = decoded._id
+    const inputtedId = req.params.id
+
+    if (decodedId !== inputtedId) {
+      res.send(401).send('Invalid User Id')
+    } else {
+      User.findById(decodedId).then((user) => {
+        res.render('edit-user', { user })
+      }).catch(err => res.send(err.message))
+    }
+  })
 })
 
 // DELETE /users/:id
@@ -70,22 +80,27 @@ router.delete('/users/:id', authenticateUser, (req, res) => {
     if (!user) {
       res.status(404).send('Item Not Found')
     }
-    res.redirect('/users')
+    res.clearCookie('token').redirect('/')
   }).catch(err => res.status(400).send())
 })
 
 // PATCH /items/:id
 router.patch('/users/:id', authenticateUser, (req, res) => {
-  const id = req.params.id
-  const update = { email: req.body.email, password: req.body.password }
-  const options = { new: true }
+  const password = req.body.password
+  const saltRounds = 10
 
-  User.findByIdAndUpdate(id, update, options).then((user) => {
-    if (!user) {
-      res.status(404).send('User Not Found')
-    }
-    res.redirect('/users')
-  })
+  bcrypt.hash(password, saltRounds).then((hash) => {
+    const id = req.params.id
+    const update = { email: req.body.email, password: hash }
+    const options = { new: true }
+    
+    User.findByIdAndUpdate(id, update, options).then((user) => {
+      if (!user) {
+        res.status(404).send('User Not Found')
+      }
+      res.redirect('/profile')
+    })
+  }).catch(err => res.send(err.message))
 })
 
 // LOGIN =====================================
@@ -111,7 +126,7 @@ router.post('/login', (req, res) => {
           const options = { expiresIn: '1d', issuer: 'https://www.demo.com' }
           const token = jwt.sign(payload, secret, options)
 
-          res.cookie('token', token, { expires: new Date(Date.now() + 86400000) }).send(user.email)
+          res.cookie('token', token, { expires: new Date(Date.now() + 86400000) }).redirect('/profile')
         } else {
           res.status(401).send('Invalid Password')
         }
