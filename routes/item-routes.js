@@ -130,7 +130,12 @@ router.patch('/items/:id', authenticateUser, (req, res) => {
 router.post('/find', (req, res) => {
   name = req.body.name
   Inventory.findOne({ name }).then((item) => {
-    res.render('view', { item })
+    console.log(item)
+    if (!item) {
+      res.status(404).send('Item Not Found')
+    } else {
+      res.render('view', { item })
+    }
   })
 })
 
