@@ -103,20 +103,25 @@ router.delete('/users/:id', authenticateUser, (req, res) => {
 // PATCH /items/:id
 router.patch('/users/:id', authenticateUser, (req, res) => {
   const password = req.body.password
+  const validation = /((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)).{8,100}/
   const saltRounds = 10
 
-  bcrypt.hash(password, saltRounds).then((hash) => {
-    const id = req.params.id
-    const update = { email: req.body.email, password: hash }
-    const options = { new: true }
-    
-    User.findByIdAndUpdate(id, update, options).then((user) => {
-      if (!user) {
-        res.status(404).send('User Not Found')
-      }
-      res.redirect('/profile')
-    })
-  }).catch(err => res.send(err.message))
+  if (!password.match(validation)) {
+    res.send('Password must contain 8-100 characters, with at least one lowercase letter, one uppercase letter, one number, and one special character.')
+  } else {
+    bcrypt.hash(password, saltRounds).then((hash) => {
+      const id = req.params.id
+      const update = { email: req.body.email, password: hash }
+      const options = { new: true }
+      
+      User.findByIdAndUpdate(id, update, options).then((user) => {
+        if (!user) {
+          res.status(404).send('User Not Found')
+        }
+        res.redirect('/profile')
+      })
+    }).catch(err => res.send(err.message))
+  }
 })
 
 // LOGIN =====================================
