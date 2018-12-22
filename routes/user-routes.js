@@ -25,12 +25,17 @@ router.get('/signup', (req, res) => {
 router.post('/users', (req, res) => {
   const { email, password } = req.body
   const user = new User({ email, password })
+  const validation = /((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)).{8,100}/
 
-  user.save().then(() => {
-    return generateAuthToken(user)
-  }).then((value) => {
-    res.cookie('token', value.token, { expires: new Date(Date.now() + 86400000) }).redirect('profile')
-  }).catch(err => res.status(400).send(err.message))
+  if (!password.match(validation)) {
+    res.send('Password must contain 8-100 characters, with at least one lowercase letter, one uppercase letter, one number, and one special character.')
+  } else {
+    user.save().then(() => {
+      return generateAuthToken(user)
+    }).then((value) => {
+      res.cookie('token', value.token, { expires: new Date(Date.now() + 86400000) }).redirect('profile')
+    }).catch(err => res.status(400).send(err.message))
+  }
 })
 
 // GET /users/:id
