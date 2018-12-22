@@ -4,6 +4,7 @@
   "description": "website template 2018 December",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "mocha -t 50000 test/test.js"
   },
   "keywords": [],
