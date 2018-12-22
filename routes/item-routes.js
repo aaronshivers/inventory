@@ -24,7 +24,7 @@ router.get('/items', authenticateUser, (req, res) => {
 })
 
 // GET /items/new
-router.get('/items/new', (req, res) => res.render('new'))
+router.get('/items/new', authenticateUser, (req, res) => res.render('new'))
 
 
 // POST /items
@@ -40,8 +40,6 @@ router.post('/items', authenticateUser, (req, res) => {
       res.redirect('items')
     }).catch(err => res.sendStatus(400))
   })
-
-
 })
 
 // GET /items/:id
@@ -62,9 +60,18 @@ router.get('/items/:id', authenticateUser, (req, res) => {
       if (!item) {
         res.status(404).send('Item Not Found')
       }
-      res.send({ item })
+      res.render('view', { item })
     }).catch(err => res.status(400).send())
   })
+})
+
+// GET /items/:id/edit
+router.get('/items/:id/edit', authenticateUser, (req, res) => {
+  const id = req.params.id
+
+  Inventory.findById(id).then((item) => {
+    res.render('edit-item', { item })
+  }).catch(err => res.send(err.message))
 })
 
 // DELETE /items/:id
@@ -84,7 +91,7 @@ router.delete('/items/:id', authenticateUser, (req, res) => {
       if (!item) {
         res.status(404).send('Item Not Found')
       }
-      res.send({ item })
+      res.redirect('items')
     }).catch(err => res.status(400).send())
   })
 })
@@ -113,7 +120,7 @@ router.patch('/items/:id', authenticateUser, (req, res) => {
       if (!item) {
         res.status(404).send('Item Not Found')
       } else {
-        res.send({ item })
+        res.redirect('/items')
       }
     }).catch(err => res.send(err.message))
   })

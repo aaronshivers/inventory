@@ -2,7 +2,7 @@
 
 <div class="container">
 
-  <h1>Profile</h1>
+  <h1>View Item</h1>
 
   <table class="table">
     
@@ -10,8 +10,8 @@
       
       <tr>
         
-        <th>User Id</th>
-        <th>Email</th>
+        <th>Item Id</th>
+        <th>Name</th>
 
       </tr>
 
@@ -20,9 +20,9 @@
     <tbody>
 
       <tr>
-        
-        <th><%= user._id %></th>
-        <th><%= user.email %></th>
+      
+        <th><%= item._id %></th>
+        <th><%= item.name %></th>
 
       </tr>
 
@@ -30,9 +30,9 @@
 
   </table>
 
-  <a href="/users/<%= user._id %>/edit/" class="btn btn-outline-dark btn-block">Edit User</a>
+  <a href="/items/<%= item._id %>/edit/" class="btn btn-outline-dark btn-block">Edit Item</a>
 
-  <form class="mt-2" id="delete" action="/users/<%= user._id %>?_method=DELETE" method="POST">
+  <form class="mt-2" id="delete" action="/items/<%= item._id %>?_method=DELETE" method="POST">
 
     <button type="submit" class="btn btn-block btn-outline-danger">Delete</button>
 

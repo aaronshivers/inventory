@@ -1,3 +1,6 @@
 node_modules/
 .env
 playground/
+middleware/find-by-credentials
+middleware/remove-token
+middleware/find-by-token

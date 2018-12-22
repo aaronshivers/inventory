@@ -19,7 +19,7 @@ router.get('/users', authenticateUser, (req, res) => {
 })
 
 // POST /users
-router.post('/users', (req, res) => {
+router.post('/users', authenticateUser, (req, res) => {
   const { email, password } = req.body
   const user = new User({ email, password })
 
@@ -46,6 +46,15 @@ router.get('/users/:id', authenticateUser, (req, res, next) => {
   }).catch(err => res.status(400).send())
 })
 
+// GET /users/:id/edit
+router.get('/users/:id/edit', (req, res) => {
+  const id = req.params.id
+
+  User.findById(id).then((user) => {
+    res.render('edit-user', { user })
+  }).catch(err => res.send(err.message))
+})
+
 // DELETE /users/:id
 router.delete('/users/:id', authenticateUser, (req, res) => {
   const id = req.params.id
@@ -58,7 +67,7 @@ router.delete('/users/:id', authenticateUser, (req, res) => {
     if (!user) {
       res.status(404).send('Item Not Found')
     }
-    res.send({ user })
+    res.redirect('/users')
   }).catch(err => res.status(400).send())
 })
 
@@ -72,7 +81,7 @@ router.patch('/users/:id', authenticateUser, (req, res) => {
     if (!user) {
       res.status(404).send('User Not Found')
     }
-    res.send({ user })
+    res.redirect('/users')
   })
 })
 

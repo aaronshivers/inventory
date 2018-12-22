@@ -1,0 +1,27 @@
+<% include partials/top %>
+
+<div class="container">
+
+  <h1 class="text-center">Edit User</h1>
+
+  <form class="form mb-2" action="/users/<%= user._id %>?_method=PATCH" method="POST">
+    
+    <div class="form-group">  
+      <label for="email">Email Address</label>
+      <input class="form-control" type="text" name="email" value="<%= user.email %>" placeholder="Email Address..." autocomplete="email" min="8" max="100" required>
+    </div>
+
+    <div class="form-group">  
+      <label for="password">Password</label>
+      <input class="form-control" type="text" name="password" value="<%= user.password %>" placeholder="Password..." autocomplete="password" min="8" max="100" required>
+    </div>
+
+    <button class="btn btn-outline-dark btn-block" type="submit">Edit User</button>
+
+  </form>
+
+  <a href="/index" class="btn btn-outline-dark btn-block">Home</a>
+
+</div>
+
+<% include partials/bottom %>
