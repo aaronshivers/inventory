@@ -56,9 +56,9 @@ router.get('/users/:id/edit', authenticateUser, (req, res) => {
 
   jwt.verify(token, secret, (err, decoded) => {
     const decodedId = decoded._id
-    const inputtedId = req.params.id
+    const inputId = req.params.id
 
-    if (decodedId !== inputtedId) {
+    if (decodedId !== inputId) {
       res.send(401).send('Invalid User Id')
     } else {
       User.findById(decodedId).then((user) => {
@@ -70,18 +70,29 @@ router.get('/users/:id/edit', authenticateUser, (req, res) => {
 
 // DELETE /users/:id
 router.delete('/users/:id', authenticateUser, (req, res) => {
-  const id = req.params.id
+  const token = req.cookies.token
+  const secret = process.env.JWT_SECRET
 
-  if (!ObjectId.isValid(id)) {
-    return res.status(404).send('Invalid ObjectId')
-  }
+  jwt.verify(token, secret, (err, decoded) => {
+    const decodedId = decoded._id
+    const inputId = req.params.id
 
-  User.findByIdAndDelete(id).then((user) => {
-    if (!user) {
-      res.status(404).send('Item Not Found')
+    if (decodedId !== inputId) {
+      res.send(401).send('Invalid User Id')
+    } else {
+
+      if (!ObjectId.isValid(inputId)) {
+        return res.status(404).send('Invalid ObjectId')
+      }
+
+      User.findByIdAndDelete(inputId).then((user) => {
+        if (!user) {
+          res.status(404).send('Item Not Found')
+        }
+        res.clearCookie('token').redirect('/')
+      }).catch(err => res.status(400).send(err.message))
     }
-    res.clearCookie('token').redirect('/')
-  }).catch(err => res.status(400).send())
+  })
 })
 
 // PATCH /items/:id
@@ -116,7 +127,7 @@ router.post('/login', (req, res) => {
 
   User.findOne({email}).then((user) => {
     if (!user) {
-      res.send(err.message)
+      res.status(404).send('User not found. Try signing up first.')
     } else {
       bcrypt.compare(password, user.password, (err, hash) => {
         if (hash) {
