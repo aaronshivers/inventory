@@ -6,17 +6,15 @@ const jwt = require('jsonwebtoken')
 
 const User = require('../models/user-model')
 const generateAuthToken = require('../middleware/generate-auth-token')
-// const findByCredentials = require('../middleware/find-by-credentials')
 const authenticateUser = require('../middleware/authenticate-user')
-// const removeToken = require('../middleware/remove-token')
-// const findByToken = require('../middleware/find-by-token')
 
+// Disabled until admin validation is created
 // GET /users
-router.get('/users', authenticateUser, (req, res) => {
-  User.find({}).then((users) => {
-    res.render('users', { users })
-  }).catch(err => res.status(400).send(err))
-})
+// router.get('/users', authenticateUser, (req, res) => {
+//   User.find({}).then((users) => {
+//     res.render('users', { users })
+//   }).catch(err => res.status(400).send(err))
+// })
 
 // GET /signup
 router.get('/signup', (req, res) => {

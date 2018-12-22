@@ -23,6 +23,15 @@ app.use(methodOverride('_method'))
 app.use(itemRoutes)
 app.use(userRoutes)
 
+app.use((req, res, next) => {
+  res.status(404).send('Sorry, we cannot find that!')
+})
+
+app.use((err, req, res, next) => {
+  console.error(err.stack)
+  res.status(500).send('Something broke!')
+})
+
 app.listen(port)
 
 module.exports = app
