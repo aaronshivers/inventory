@@ -10,8 +10,10 @@ const userSchema = new Schema({
     type: String,
     required: true,
     unique: true,
-    minlength: 7,
+    lowercase: true,
     trim: true,
+    minlength: 8,
+    maxlength: 100,
     validate: {
       validator: validator.isEmail,
       message: `{VALUE} is not a valid email address.`
@@ -20,8 +22,9 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true,
+    trim: true,
     minlength: 8,
-    trim: true
+    maxlength: 100
   },
   items: [{
     type: Schema.Types.ObjectId,

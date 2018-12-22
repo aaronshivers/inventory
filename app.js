@@ -10,6 +10,9 @@ const userRoutes = require('./routes/user-routes')
 const app = express()
 const port = process.env.PORT
 
+app.set('view engine', 'ejs')
+
+app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 app.use(cookieParser())
 

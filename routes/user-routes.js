@@ -14,7 +14,7 @@ const authenticateUser = require('../middleware/authenticate-user')
 // GET /users
 router.get('/users', authenticateUser, (req, res) => {
   User.find({}).then((users) => {
-    res.send({ users })
+    res.render('users', { users })
   }).catch(err => res.status(400).send(err))
 })
 
@@ -42,7 +42,7 @@ router.get('/users/:id', authenticateUser, (req, res, next) => {
     if (!user) {
       res.status(404).send('User Not Found')
     }
-    res.send({ user })
+    res.render('profile', { user })
   }).catch(err => res.status(400).send())
 })
 
@@ -74,6 +74,20 @@ router.patch('/users/:id', authenticateUser, (req, res) => {
     }
     res.send({ user })
   })
+})
+
+// Signup =====================================
+
+// GET /signup
+router.get('/signup', (req, res) => {
+  res.redirect('profile')
+})
+
+// LOGIN =====================================
+
+// GET /login
+router.get('/login', (req, res) => {
+  res.render('login')
 })
 
 // POST /login
@@ -110,7 +124,7 @@ router.get('/profile', authenticateUser, (req, res) => {
     const id = decoded._id
 
     User.findById(id).then((user) => {
-      res.send(user)
+      res.render('profile', { user })
     })
   })
 })

@@ -7,7 +7,7 @@ const Inventory = require('../models/item-model')
 const authenticateUser = require('../middleware/authenticate-user')
 
 // GET /
-router.get('/', (req, res) => res.send('Inventory Application'))
+router.get('/', (req, res) => res.render('index'))
 
 // GET /items
 router.get('/items', authenticateUser, (req, res) => {
@@ -18,7 +18,7 @@ router.get('/items', authenticateUser, (req, res) => {
     const owner = decoded._id
 
     Inventory.find({owner}).then((items) => {
-      res.send({ items })
+      res.render('items', { items })
     }).catch(err => res.sendStatus(400))
   })
 })
