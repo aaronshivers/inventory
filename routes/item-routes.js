@@ -23,6 +23,10 @@ router.get('/items', authenticateUser, (req, res) => {
   })
 })
 
+// GET /items/new
+router.get('/items/new', (req, res) => res.render('new'))
+
+
 // POST /items
 router.post('/items', authenticateUser, (req, res) => {
   const token = req.cookies.token
@@ -30,10 +34,10 @@ router.post('/items', authenticateUser, (req, res) => {
 
   jwt.verify(token, secret, (err, decoded) => {
     const owner = decoded._id
-    const name = new Inventory({name: req.body.name, owner: owner })
+    const name = new Inventory({ name: req.body.name, owner: owner })
 
-    name.save().then((item) => {
-      res.send({ item })
+    name.save().then(() => {
+      res.redirect('items')
     }).catch(err => res.sendStatus(400))
   })
 

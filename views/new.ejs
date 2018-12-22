@@ -1,0 +1,22 @@
+<% include partials/top %>
+
+<div class="container">
+
+  <h1 class="text-center">New Item</h1>
+
+  <form class="form mb-2" action="/items" method="POST">
+    
+    <div class="form-group">  
+      <label for="name">Item Name</label>
+      <input class="form-control" type="text" name="name" placeholder="Item Name..." min="8" max="100" required>
+    </div>
+
+    <button class="btn btn-outline-dark btn-block" type="submit">Create Item</button>
+
+  </form>
+
+  <a href="/index" class="btn btn-outline-dark btn-block">Home</a>
+
+</div>
+
+<% include partials/bottom %>

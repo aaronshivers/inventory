@@ -1,0 +1,39 @@
+<% include partials/top %>
+
+<div class="container">
+
+  <h1>User List</h1>
+
+  <table class="table">
+    
+    <thead class="thead-dark">
+      
+      <tr>
+        
+        <th>User Id</th>
+        <th>Email</th>
+
+      </tr>
+
+    </thead>
+
+    <tbody>
+      
+      <% users.forEach((user) => { %>
+      <tr>
+      
+        <th><%= user._id %></th>
+        <th><%= user.email %></th>
+
+      </tr>
+      <% }) %>
+
+    </tbody>
+
+  </table>  
+
+</div>
+
+
+
+<% include partials/bottom %>

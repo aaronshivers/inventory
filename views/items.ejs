@@ -1,0 +1,39 @@
+<% include partials/top %>
+
+<div class="container">
+
+  <h1>Item List</h1>
+
+  <table class="table">
+    
+    <thead class="thead-dark">
+      
+      <tr>
+        
+        <th>Item Id</th>
+        <th>Name</th>
+
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      <% items.forEach((item) => { %>
+      <tr>
+      
+        <th><%= item._id %></th>
+        <th><%= item.name %></th>
+
+      </tr>
+      <% }) %>
+
+    </tbody>
+
+  </table>  
+
+</div>
+
+
+
+<% include partials/bottom %>
