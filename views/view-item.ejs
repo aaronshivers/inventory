@@ -10,8 +10,8 @@
       
       <tr>
         
-        <th>Item Id</th>
-        <th>Name</th>
+        <th><!-- Item Id --></th>
+        <th><!-- Name --></th>
 
       </tr>
 
@@ -19,10 +19,31 @@
 
     <tbody>
 
+      <!-- <tr>
+      
+        <th>Item Id</th>
+        <th><%= item._id %></th>
+
+      </tr> -->
+
       <tr>
       
-        <th><%= item._id %></th>
+        <th>Item Name</th>
         <th><%= item.name %></th>
+
+      </tr>
+
+      <tr>
+      
+        <th>Model Number</th>
+        <th><%= item.model %></th>
+
+      </tr>
+
+      <tr>
+      
+        <th>Serial Number</th>
+        <th><%= item.serial %></th>
 
       </tr>
 

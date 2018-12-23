@@ -8,7 +8,7 @@ const User = require('../models/user-model')
 const generateAuthToken = require('../middleware/generate-auth-token')
 const authenticateUser = require('../middleware/authenticate-user')
 
-// Disabled until admin validation is created
+// Disabled until admin authorization is created
 // GET /users
 // router.get('/users', authenticateUser, (req, res) => {
 //   User.find({}).then((users) => {
@@ -38,21 +38,22 @@ router.post('/users', (req, res) => {
   }
 })
 
+// Disabled until 'admin' authorization created
 // GET /users/:id
-router.get('/users/:id', authenticateUser, (req, res, next) => {
-  const id = req.params.id
+// router.get('/users/:id', authenticateUser, (req, res, next) => {
+//   const id = req.params.id
 
-  if (!ObjectId.isValid(id)) {
-    return res.status(404).send('Invalid ObjectId')
-  }
+//   if (!ObjectId.isValid(id)) {
+//     return res.status(404).send('Invalid ObjectId')
+//   }
 
-  User.findById(id).then((user) => {
-    if (!user) {
-      res.status(404).send('User Not Found')
-    }
-    res.render('profile', { user })
-  }).catch(err => res.status(400).send())
-})
+//   User.findById(id).then((user) => {
+//     if (!user) {
+//       res.status(404).send('User Not Found')
+//     }
+//     res.render('profile', { user })
+//   }).catch(err => res.status(400).send())
+// })
 
 // GET /users/:id/edit
 router.get('/users/:id/edit', authenticateUser, (req, res) => {

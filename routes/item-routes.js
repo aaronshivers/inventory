@@ -24,7 +24,7 @@ router.get('/items', authenticateUser, (req, res) => {
 })
 
 // GET /items/new
-router.get('/items/new', authenticateUser, (req, res) => res.render('new'))
+router.get('/items/new', authenticateUser, (req, res) => res.render('new-item'))
 
 
 // POST /items
@@ -34,9 +34,10 @@ router.post('/items', authenticateUser, (req, res) => {
 
   jwt.verify(token, secret, (err, decoded) => {
     const owner = decoded._id
-    const name = new Inventory({ name: req.body.name, owner: owner })
+    const { name, model, serial } = req.body
+    const item = new Inventory({ name, model, serial, owner })
 
-    name.save().then(() => {
+    item.save().then(() => {
       res.redirect('items')
     }).catch(err => res.sendStatus(400))
   })
@@ -60,7 +61,7 @@ router.get('/items/:id', authenticateUser, (req, res) => {
       if (!item) {
         res.status(404).send('Item Not Found')
       }
-      res.render('view', { item })
+      res.render('view-item', { item })
     }).catch(err => res.status(400).send())
   })
 })
@@ -113,7 +114,8 @@ router.patch('/items/:id', authenticateUser, (req, res) => {
     }
 
     const conditions = {_id, owner}
-    const update = { name: req.body.name }
+    const { name, model, serial } = req.body
+    const update = { name, model, serial }
     const options = { new: true }
 
     Inventory.findOneAndUpdate(conditions, update, options).then((item) => {

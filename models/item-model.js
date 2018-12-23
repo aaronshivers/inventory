@@ -6,6 +6,19 @@ const itemSchema = new Schema({
     type: String,
     required: true,
     minlength: 1,
+    maxlength: 100,
+    trim: true
+  },
+  model: {
+    type: String,
+    minlength: 1,
+    maxlength: 100,
+    trim: true
+  },
+  serial: {
+    type: String,
+    minlength: 1,
+    maxlength: 100,
     trim: true
   },
   owner: {
