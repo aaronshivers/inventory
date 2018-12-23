@@ -89,14 +89,15 @@ router.delete('/users/:id', authenticateUser, (req, res) => {
 
       if (!ObjectId.isValid(inputId)) {
         return res.status(404).send('Invalid ObjectId')
+      } else {
+        User.findByIdAndDelete(inputId).then((user) => {
+          if (!user) {
+            res.status(404).send('Item Not Found')
+          } else {
+            res.clearCookie('token').redirect('/')
+          }
+        }).catch(err => res.status(400).send(err.message))
       }
-
-      User.findByIdAndDelete(inputId).then((user) => {
-        if (!user) {
-          res.status(404).send('Item Not Found')
-        }
-        res.clearCookie('token').redirect('/')
-      }).catch(err => res.status(400).send(err.message))
     }
   })
 })
@@ -118,8 +119,9 @@ router.patch('/users/:id', authenticateUser, (req, res) => {
       User.findByIdAndUpdate(id, update, options).then((user) => {
         if (!user) {
           res.status(404).send('User Not Found')
+        } else {
+          res.redirect('/profile')
         }
-        res.redirect('/profile')
       })
     }).catch(err => res.send(err.message))
   }
@@ -166,7 +168,11 @@ router.get('/profile', authenticateUser, (req, res) => {
     const id = decoded._id
 
     User.findById(id).then((user) => {
-      res.render('profile', { user })
+      if (!user) {
+        res.sendStatus(401)
+      } else {
+        res.render('profile', { user })
+      }
     })
   })
 })

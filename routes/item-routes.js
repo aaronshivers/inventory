@@ -54,15 +54,20 @@ router.get('/items/:id', authenticateUser, (req, res) => {
   }
 
   jwt.verify(token, secret, (err, decoded) => {
-    const owner = decoded._id
-    const conditions = {_id, owner}
+    if (err) {
+      res.send(err.message)
+    } else {
+      const owner = decoded._id
+      const conditions = {_id, owner}
 
-    Inventory.findOne(conditions).then((item) => {
-      if (!item) {
-        res.status(404).send('Item Not Found')
-      }
-      res.render('view-item', { item })
-    }).catch(err => res.status(400).send())
+      Inventory.findOne(conditions).then((item) => {
+        if (!item) {
+          res.status(404).send('Item Not Found')
+        } else {
+          res.render('view-item', { item })
+        }
+      }).catch(err => res.status(400).send())
+    }
   })
 })
 
@@ -71,7 +76,11 @@ router.get('/items/:id/edit', authenticateUser, (req, res) => {
   const id = req.params.id
 
   Inventory.findById(id).then((item) => {
-    res.render('edit-item', { item })
+    if (!item) {
+      res.sendStatus(404)
+    } else {
+      res.render('edit-item', { item })
+    }
   }).catch(err => res.send(err.message))
 })
 
