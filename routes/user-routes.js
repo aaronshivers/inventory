@@ -84,7 +84,7 @@ router.delete('/users/:id', authenticateUser, (req, res) => {
     const inputId = req.params.id
 
     if (decodedId !== inputId) {
-      res.send(401).send('Invalid User Id')
+      res.status(401).send('Invalid User Id')
     } else {
 
       if (!ObjectId.isValid(inputId)) {

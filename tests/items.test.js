@@ -14,45 +14,104 @@ beforeEach(populateUsers)
 
 // GET /items
 describe('GET /items', () => {
+
+  describe('if no token is provided', () => {
+
+    it('should respond 401', async () => {
+
+      await request(app)
+        .get('/items')
+        .expect(401)
+    })
+  })
+
+  describe('if a valid token is provided', () => {
+    
   const cookie = `token=${tokens.token0}`
 
-  it('should return all items', (done) => {
-    request(app)
-      .get('/items')
-      .set('Cookie', cookie)
-      .expect(200)
-      .expect((res) => {
-        expect(res.body.items.length).not.toBe(0)
-      })
-      .end(done)
+    it('should respond 200', async () => {
+      request(app)
+        .get('/items')
+        .set('Cookie', cookie)
+        .expect(200)
+    })
+
+    it('should return all items', async () => {
+      request(app)
+        .get('/items')
+        .set('Cookie', cookie)
+        .expect((res) => {
+          expect(res.body.items.length).not.toBe(0)
+        })
+    })
   })
 })
 
 // POST /items
 describe('POST /items', () => {
-  const cookie = `token=${tokens.token0}`
-  const name = 'test item'
 
-  it('should create a new item', (done) => {
-    request(app)
-      .post('/items')
-      .set('Cookie', cookie)
-      .send({ name })
-      .expect(200)
-      .expect((res) => {
-        expect(res.body.item.name).toBe(name)
-      })
-      .end((err, res) => {
-        if (err) {
-          return done(err)
-        }
+  describe('when no token is provided', () => {
 
-        Inventory.find({ name }).then((items) => {
-          expect(items.length).toBe(1)
-          expect(items[0].name).toBe(name)
-          done()
-        }).catch((err) => done(err))
+    it('should respond 401', async () => {
+
+      await request(app)
+        .post('/items')
+        .expect(401)
+    })
+  })
+
+  describe('when a valid token is provided', () => {
+
+    describe('when `name` is invalid', () => {
+
+      const name = 'test item'
+
+      it('should respond 400', async () => {
+
+        await request(app)
+          .post('/items')
+          .set('Cookie', cookie)
+          .send({ name: 1244 })
+          .expect(400)
       })
+    })
+
+    describe('when `name` is valid', () => {
+
+      const name = 'test item'
+
+      it('should respond 200', async () => {
+
+        await request(app)
+          .post('/items')
+          .set('Cookie', cookie)
+          .send({ name })
+          .expect(200)
+      })
+
+      it('should return the new item', async () => {
+
+        await request(app)
+          .post('/items')
+          .set('Cookie', cookie)
+          .send({ name })
+          .expect(res => {
+            expect(res.body.item.name).toBe(name)
+          })
+      })
+
+      it('should create a new item', async () => {
+
+        await request(app)
+          .post('/items')
+          .set('Cookie', cookie)
+          .send({ name })
+
+        const foundItems = await Inventory.find({ name })
+        expect(foundItems.length).toBe(1)
+        expect(foundItems[0].name).toBe(name)
+      })
+    })
   })
 
   it('should NOT create a new item, if body data is invalid', (done) => {
