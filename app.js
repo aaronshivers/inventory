@@ -10,7 +10,7 @@ const itemRoutes = require('./routes/item-routes')
 const userRoutes = require('./routes/user-routes')
 
 const app = express()
-const port = process.env.PORT
+const port = process.env.PORT || 3000
 
 app.set('view engine', 'ejs')
 
@@ -32,6 +32,6 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something broke!')
 })
 
-app.listen(port)
+app.listen(port, () => console.log(`Server running on port ${ port }.`))
 
 module.exports = app

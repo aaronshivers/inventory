@@ -10,16 +10,6 @@ const {populateDatabase, populateInventory, items, populateUsers, users, tokens}
 beforeEach(populateInventory)
 beforeEach(populateUsers)
 
-// GET /
-describe('GET /', () => {
-  it('should respond with 200', (done) => {
-    request(app)
-      .get('/')
-      .expect(200)
-      .end(done)
-  })
-})
-
 // ITEMS ======================================
 
 // GET /items

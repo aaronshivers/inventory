@@ -1,32 +1,33 @@
 {
-  "name": "website-2018-12",
+  "name": "inventory",
   "version": "1.0.0",
-  "description": "website template 2018 December",
+  "description": "inventory application",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "mocha -t 50000 test/test.js"
+    "test": "export NODE_ENV=test || SET \"NODE_ENV=test\" && mocha -t 5000 tests/**/*.test.js",
+    "test-watch": "nodemon --exec \"npm test\""
   },
   "keywords": [],
   "author": "aaronshivers",
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "bcrypt": "^3.0.2",
-    "cookie-parser": "^1.4.3",
-    "dotenv": "^6.2.0",
-    "ejs": "^2.6.1",
-    "express": "^4.16.4",
-    "helmet": "^3.15.0",
-    "jsonwebtoken": "^8.4.0",
-    "lodash": "^4.17.11",
+    "bcrypt": "^3.0.6",
+    "cookie-parser": "^1.4.4",
+    "dotenv": "^8.0.0",
+    "ejs": "^2.6.2",
+    "express": "^4.17.1",
+    "helmet": "^3.18.0",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.14",
     "method-override": "^3.0.0",
-    "mongoose": "^5.4.0",
-    "validator": "^10.9.0"
+    "mongoose": "^5.6.4",
+    "validator": "^11.1.0"
   },
   "devDependencies": {
-    "expect": "^23.6.0",
-    "mocha": "^5.2.0",
-    "supertest": "^3.3.0"
+    "expect": "^24.8.0",
+    "mocha": "^6.1.4",
+    "supertest": "^4.0.2"
   },
   "directories": {
     "test": "test"
